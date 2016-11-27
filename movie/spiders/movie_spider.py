@@ -4,10 +4,25 @@ from movie.items import MovieItem
 
 class MovieSpider(scrapy.Spider):
     name = "movie"
-    start_urls = [
-        'http://www.imdb.com/title/tt0114746/',
-        'http://www.imdb.com/title/tt0137523/',
-    ]
+
+    file_path=r"/home/wsh/spider/movie/movie/spiders/allMoviesUrl.txt"
+    urlList=[]
+    urlsFile=open(file_path)
+    for url in urlsFile:
+        urlList.append(url)
+    urlsFile.close()
+
+    start_urls = urlList
+	
+    def getAllUrls(self):
+	file_path=r"allMoviesUrl.txt"
+	urlList=[]
+	urlsFile=open(file_path)
+	for url in urlsFile:
+		urlList.append(url)
+	urlsFile.close()
+	return urlList
+
 
     def parse(self, response):
     	title=response.xpath('//meta[@property="og:title"]/@content').extract()[0]
@@ -27,3 +42,4 @@ class MovieSpider(scrapy.Spider):
 	item["movie_url"]=url
 
 	return item
+    
